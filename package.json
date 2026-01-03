@@ -1,6 +1,8 @@
 {
-  "name": "stock-backend",
+  "name": "control-de-stock",
   "version": "1.0.0",
+  "description": "App simple de control de stock",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },

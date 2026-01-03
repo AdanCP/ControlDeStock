@@ -1,4 +1,4 @@
-const API_URL = "https://stock-backend.onrender.com/stock";
+const API_URL = "/api/stock";
 
 const lista = document.getElementById("lista");
 const form = document.getElementById("form");
