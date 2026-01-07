@@ -1,4 +1,8 @@
+console.log("state.js cargado");
+
 const state = {
+  view: "home",
   user: null,
-  view: "login"
+
+  stockView: null // consultar | crear | modificar | borrar
 };
