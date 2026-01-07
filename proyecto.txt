@@ -1,0 +1,3 @@
+generar login
+crear  - modificar - actualizar - eliminar
+listados
