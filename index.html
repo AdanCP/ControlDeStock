@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Control de Stock</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <h1>📦 Stock</h1>
 
-  <form id="form">
-    <input id="nombre" placeholder="Producto" required>
-    <input id="cantidad" type="number" placeholder="Cantidad" required>
-    <button>Agregar</button>
-  </form>
+  <main id="app"></main>
 
-  <ul id="lista"></ul>
-
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
