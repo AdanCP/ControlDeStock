@@ -1,6 +1,6 @@
 console.log("views.js cargado");
 
-/* HOME */
+/* ===== HOME ===== */
 function renderHome() {
   app.innerHTML = `
     <div class="card">
@@ -18,7 +18,7 @@ function renderHome() {
   `;
 }
 
-/* LOGIN */
+/* ===== LOGIN ===== */
 function renderLogin() {
   app.innerHTML = `
     <div class="card">
@@ -33,7 +33,7 @@ function renderLogin() {
   `;
 }
 
-/* REGISTER */
+/* ===== REGISTER ===== */
 function renderRegister() {
   app.innerHTML = `
     <div class="card">
@@ -48,40 +48,73 @@ function renderRegister() {
   `;
 }
 
-/* MENU PRINCIPAL */
+/* ===== MENÚ PRINCIPAL ===== */
 function renderMainMenu() {
   app.innerHTML = `
     <div class="card">
       <h2>Menú principal</h2>
 
-      <button class="btn-primary" onclick="goTo('stock')">📦 Stock</button>
-      <button class="btn-primary">💰 Ventas</button>
-      <button class="btn-primary">🚚 Pedidos</button>
-      <button class="btn-primary">📄 Listados</button>
+      <div class="icon-grid">
+        <button class="icon-button primary" onclick="goTo('stock')">
+          <span>📦</span>
+          Stock
+        </button>
+
+        <button class="icon-button primary">
+          <span>💰</span>
+          Ventas
+        </button>
+
+        <button class="icon-button primary">
+          <span>🚚</span>
+          Pedidos
+        </button>
+
+        <button class="icon-button primary">
+          <span>📄</span>
+          Listados
+        </button>
+      </div>
 
       <button onclick="goTo('home')">Cerrar sesión</button>
     </div>
   `;
 }
 
-/* ===== STOCK ===== */
-
+/* ===== STOCK - MENÚ ===== */
 function renderStockMenu() {
   app.innerHTML = `
     <div class="card">
       <h2>Stock</h2>
 
-      <button class="btn-primary" onclick="goToStock('consultar')">🔍 Consultar</button>
-      <button class="btn-primary" onclick="goToStock('crear')">➕ Crear</button>
-      <button class="btn-primary" onclick="goToStock('modificar')">✏️ Modificar</button>
-      <button class="btn-danger" onclick="goToStock('borrar')">🗑️ Borrar</button>
+      <div class="icon-grid">
+        <button class="icon-button primary" onclick="goToStock('consultar')">
+          <span>🔍</span>
+          Consultar
+        </button>
+
+        <button class="icon-button primary" onclick="goToStock('crear')">
+          <span>➕</span>
+          Crear
+        </button>
+
+        <button class="icon-button primary" onclick="goToStock('modificar')">
+          <span>✏️</span>
+          Modificar
+        </button>
+
+        <button class="icon-button danger" onclick="goToStock('borrar')">
+          <span>🗑️</span>
+          Borrar
+        </button>
+      </div>
 
       <button onclick="goTo('menu')">Volver</button>
     </div>
   `;
 }
 
-/* STOCK - CREAR */
+/* ===== STOCK - CREAR ===== */
 function renderStockCrear() {
   app.innerHTML = `
     <div class="card">
@@ -92,18 +125,13 @@ function renderStockCrear() {
       <input placeholder="Detalle" />
       <input placeholder="Contenido / Peso" />
 
-      <button class="btn-primary">
-        Aceptar
-      </button>
-
-      <button onclick="goToStockMenu()">
-        Volver (pierde cambios)
-      </button>
+      <button class="btn-primary">Aceptar</button>
+      <button onclick="goToStockMenu()">Volver (pierde cambios)</button>
     </div>
   `;
 }
 
-/* STOCK - MODIFICAR */
+/* ===== STOCK - MODIFICAR ===== */
 function renderStockModificar() {
   app.innerHTML = `
     <div class="card">
@@ -118,18 +146,13 @@ function renderStockModificar() {
       <input placeholder="Detalle" />
       <input placeholder="Contenido / Peso" />
 
-      <button class="btn-primary">
-        Modificar
-      </button>
-
-      <button onclick="goToStockMenu()">
-        Volver (pierde cambios)
-      </button>
+      <button class="btn-primary">Modificar</button>
+      <button onclick="goToStockMenu()">Volver (pierde cambios)</button>
     </div>
   `;
 }
 
-/* STOCK - BORRAR */
+/* ===== STOCK - BORRAR ===== */
 function renderStockBorrar() {
   app.innerHTML = `
     <div class="card">
@@ -139,34 +162,31 @@ function renderStockBorrar() {
         <option>Seleccionar producto</option>
       </select>
 
-      <button class="btn-danger">
-        Borrar
-      </button>
-
-      <button onclick="goToStockMenu()">
-        Volver
-      </button>
+      <button class="btn-danger">Borrar</button>
+      <button onclick="goToStockMenu()">Volver</button>
     </div>
   `;
 }
 
-/* STOCK - CONSULTAR */
+/* ===== STOCK - CONSULTAR ===== */
 function renderStockConsultar() {
   app.innerHTML = `
     <div class="card">
       <h2>Consultar stock</h2>
 
-      <button class="btn-primary">
-        📦 Stock total
-      </button>
+      <div class="icon-grid">
+        <button class="icon-button primary">
+          <span>📦</span>
+          Stock total
+        </button>
 
-      <button class="btn-primary">
-        🔎 Stock por producto
-      </button>
+        <button class="icon-button primary">
+          <span>🔎</span>
+          Por producto
+        </button>
+      </div>
 
-      <button onclick="goToStockMenu()">
-        Volver
-      </button>
+      <button onclick="goToStockMenu()">Volver</button>
     </div>
   `;
 }

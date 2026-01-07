@@ -6,12 +6,12 @@
   --danger: #ef4444;
   --text: #111827;
   --muted: #6b7280;
-  --radius: 14px;
+  --radius: 16px;
 }
 
 * {
   box-sizing: border-box;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
@@ -24,12 +24,14 @@ body {
   padding: 16px;
 }
 
+/* ===== CONTENEDORES ===== */
+
 .card {
   background: var(--card);
   border-radius: var(--radius);
   padding: 20px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
 h1, h2 {
@@ -40,14 +42,29 @@ p.muted {
   color: var(--muted);
 }
 
+/* ===== FORM ===== */
+
+input,
+select {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid #e5e7eb;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+/* ===== BOTONES CLÁSICOS ===== */
+
 button {
   width: 100%;
   padding: 14px;
   border-radius: var(--radius);
   border: none;
   font-size: 16px;
-  margin-top: 10px;
+  margin-top: 12px;
   cursor: pointer;
+  background: #e5e7eb;
 }
 
 .btn-primary {
@@ -65,11 +82,61 @@ button {
   color: white;
 }
 
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: var(--radius);
-  border: 1px solid #e5e7eb;
-  margin-top: 8px;
+/* ===== GRID DE ICONOS (MENÚS) ===== */
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* ===== BOTONES TIPO TARJETA ===== */
+
+.icon-button {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 22px 10px;
+  min-height: 120px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
   font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.icon-button span {
+  font-size: 32px;
+}
+
+/* Estados */
+.icon-button:active {
+  transform: scale(0.97);
+}
+
+.icon-button.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.icon-button.danger {
+  background: var(--danger);
+  color: white;
+}
+
+/* ===== DESKTOP ===== */
+
+@media (min-width: 768px) {
+  #app {
+    max-width: 420px;
+    margin: auto;
+  }
 }
