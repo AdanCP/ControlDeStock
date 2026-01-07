@@ -3,9 +3,12 @@ console.log("views.js cargado");
 /* ===== HOME ===== */
 function renderHome() {
   app.innerHTML = `
-    <div class="card">
+    <div class="card center-screen">
+      
       <h1>Control de Stock</h1>
       <p class="muted">Gestión simple y rápida</p>
+
+      <img src="assets/logo-mercuria.jpeg" alt="Logo" class="logo" />
 
       <button class="btn-primary" onclick="goTo('login')">
         Iniciar sesión
@@ -110,83 +113,6 @@ function renderStockMenu() {
       </div>
 
       <button onclick="goTo('menu')">Volver</button>
-    </div>
-  `;
-}
-
-/* ===== STOCK - CREAR ===== */
-function renderStockCrear() {
-  app.innerHTML = `
-    <div class="card">
-      <h2>Crear producto</h2>
-
-      <input placeholder="Producto" />
-      <input placeholder="Marca" />
-      <input placeholder="Detalle" />
-      <input placeholder="Contenido / Peso" />
-
-      <button class="btn-primary">Aceptar</button>
-      <button onclick="goToStockMenu()">Volver (pierde cambios)</button>
-    </div>
-  `;
-}
-
-/* ===== STOCK - MODIFICAR ===== */
-function renderStockModificar() {
-  app.innerHTML = `
-    <div class="card">
-      <h2>Modificar producto</h2>
-
-      <select>
-        <option>Seleccionar producto</option>
-      </select>
-
-      <input placeholder="Producto" />
-      <input placeholder="Marca" />
-      <input placeholder="Detalle" />
-      <input placeholder="Contenido / Peso" />
-
-      <button class="btn-primary">Modificar</button>
-      <button onclick="goToStockMenu()">Volver (pierde cambios)</button>
-    </div>
-  `;
-}
-
-/* ===== STOCK - BORRAR ===== */
-function renderStockBorrar() {
-  app.innerHTML = `
-    <div class="card">
-      <h2>Borrar producto</h2>
-
-      <select>
-        <option>Seleccionar producto</option>
-      </select>
-
-      <button class="btn-danger">Borrar</button>
-      <button onclick="goToStockMenu()">Volver</button>
-    </div>
-  `;
-}
-
-/* ===== STOCK - CONSULTAR ===== */
-function renderStockConsultar() {
-  app.innerHTML = `
-    <div class="card">
-      <h2>Consultar stock</h2>
-
-      <div class="icon-grid">
-        <button class="icon-button primary">
-          <span>📦</span>
-          Stock total
-        </button>
-
-        <button class="icon-button primary">
-          <span>🔎</span>
-          Por producto
-        </button>
-      </div>
-
-      <button onclick="goToStockMenu()">Volver</button>
     </div>
   `;
 }

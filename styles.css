@@ -34,12 +34,32 @@ body {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
+.center-screen {
+  min-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* ===== TEXTO ===== */
+
 h1, h2 {
   margin-top: 0;
 }
 
 p.muted {
   color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* ===== IMAGEN INICIO ===== */
+
+.logo {
+  width: 140px;
+  max-width: 60%;
+  margin-bottom: 20px;
 }
 
 /* ===== FORM ===== */
@@ -82,7 +102,7 @@ button {
   color: white;
 }
 
-/* ===== GRID DE ICONOS (MENÚS) ===== */
+/* ===== GRID DE ICONOS ===== */
 
 .icon-grid {
   display: grid;
@@ -90,8 +110,6 @@ button {
   gap: 14px;
   margin-top: 10px;
 }
-
-/* ===== BOTONES TIPO TARJETA ===== */
 
 .icon-button {
   background: var(--card);
@@ -117,7 +135,6 @@ button {
   font-size: 32px;
 }
 
-/* Estados */
 .icon-button:active {
   transform: scale(0.97);
 }
