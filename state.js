@@ -1,6 +1,7 @@
-// state.js
-export const state = {
-  view: "home",      // home | login | register | menu | stock
-  stockView: null,   // crear | modificar | borrar | consultar
+const app = document.getElementById("app");
+
+const state = {
+  view: "home",
+  stockView: null,
   user: null
 };

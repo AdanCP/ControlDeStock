@@ -65,8 +65,9 @@ body {
 
 /* Para menús y pantallas largas */
 .card.menu {
-  justify-content: flex-start;
+  justify-content: center;
 }
+
 
 /* ==============================
    CENTRADO (HOME)
