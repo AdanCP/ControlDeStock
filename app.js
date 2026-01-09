@@ -1,28 +1,44 @@
+// app.js
 console.log("app.js cargado");
+
+import { state } from "./state.js";
+import {
+  renderHome,
+  renderLogin,
+  renderRegister,
+  renderMainMenu,
+  renderStockMenu,
+  renderStockCrear,
+  renderStockModificar,
+  renderStockBorrar,
+  renderStockConsultar
+} from "./views.js";
 
 const app = document.getElementById("app");
 
-function goTo(view) {
+/* =====================
+   NAVEGACIÓN
+===================== */
+export function goTo(view) {
   state.view = view;
   state.stockView = null;
   render();
 }
 
-function goToStock(subView) {
+export function goToStock(subView) {
+  state.view = "stock";
   state.stockView = subView;
   render();
 }
 
-function goToStockMenu() {
-  state.stockView = null;
-  render();
-}
-
-function fakeLogin() {
+export function fakeLogin() {
   state.user = { name: "Usuario demo" };
   goTo("menu");
 }
 
+/* =====================
+   ROUTER
+===================== */
 function render() {
   app.innerHTML = "";
 
@@ -44,4 +60,9 @@ function render() {
   }
 }
 
-render();
+/* =====================
+   BOOTSTRAP
+===================== */
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+});

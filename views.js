@@ -1,7 +1,14 @@
+// views.js
 console.log("views.js cargado");
 
-/* ===== HOME ===== */
-function renderHome() {
+import { goTo, goToStock, fakeLogin } from "./app.js";
+
+const app = document.getElementById("app");
+
+/* =====================
+   HOME
+===================== */
+export function renderHome() {
   app.innerHTML = `
     <div class="card center-screen">
       
@@ -10,19 +17,29 @@ function renderHome() {
 
       <img src="assets/logo-mercuria.jpeg" alt="Logo" class="logo" />
 
-      <button class="btn-primary" onclick="goTo('login')">
+      <button id="btn-login" class="btn-primary">
         Iniciar sesión
       </button>
 
-      <button class="btn-secondary" onclick="goTo('register')">
+      <button id="btn-register" class="btn-secondary">
         Registrarse
       </button>
     </div>
   `;
+
+  document
+    .getElementById("btn-login")
+    .addEventListener("click", () => goTo("login"));
+
+  document
+    .getElementById("btn-register")
+    .addEventListener("click", () => goTo("register"));
 }
 
-/* ===== LOGIN ===== */
-function renderLogin() {
+/* =====================
+   LOGIN
+===================== */
+export function renderLogin() {
   app.innerHTML = `
     <div class="card">
       <h2>Iniciar sesión</h2>
@@ -30,14 +47,24 @@ function renderLogin() {
       <input placeholder="Usuario" />
       <input type="password" placeholder="Contraseña" />
 
-      <button class="btn-primary" onclick="fakeLogin()">Entrar</button>
-      <button onclick="goTo('home')">Volver</button>
+      <button id="btn-login-ok" class="btn-primary">Entrar</button>
+      <button id="btn-login-back">Volver</button>
     </div>
   `;
+
+  document
+    .getElementById("btn-login-ok")
+    .addEventListener("click", fakeLogin);
+
+  document
+    .getElementById("btn-login-back")
+    .addEventListener("click", () => goTo("home"));
 }
 
-/* ===== REGISTER ===== */
-function renderRegister() {
+/* =====================
+   REGISTER
+===================== */
+export function renderRegister() {
   app.innerHTML = `
     <div class="card">
       <h2>Registro</h2>
@@ -46,19 +73,25 @@ function renderRegister() {
       <input type="password" placeholder="Contraseña" />
 
       <button class="btn-primary">Registrar</button>
-      <button onclick="goTo('home')">Volver</button>
+      <button id="btn-register-back">Volver</button>
     </div>
   `;
+
+  document
+    .getElementById("btn-register-back")
+    .addEventListener("click", () => goTo("home"));
 }
 
-/* ===== MENÚ PRINCIPAL ===== */
-function renderMainMenu() {
+/* =====================
+   MENÚ PRINCIPAL
+===================== */
+export function renderMainMenu() {
   app.innerHTML = `
     <div class="card">
       <h2>Menú principal</h2>
 
       <div class="icon-grid">
-        <button class="icon-button primary" onclick="goTo('stock')">
+        <button id="btn-stock" class="icon-button primary">
           <span>📦</span>
           Stock
         </button>
@@ -79,40 +112,169 @@ function renderMainMenu() {
         </button>
       </div>
 
-      <button onclick="goTo('home')">Cerrar sesión</button>
+      <button id="btn-logout">Cerrar sesión</button>
     </div>
   `;
+
+  document
+    .getElementById("btn-stock")
+    .addEventListener("click", () => goTo("stock"));
+
+  document
+    .getElementById("btn-logout")
+    .addEventListener("click", () => goTo("home"));
 }
 
-/* ===== STOCK - MENÚ ===== */
-function renderStockMenu() {
+/* =====================
+   STOCK - MENÚ
+===================== */
+export function renderStockMenu() {
   app.innerHTML = `
     <div class="card">
       <h2>Stock</h2>
 
       <div class="icon-grid">
-        <button class="icon-button primary" onclick="goToStock('consultar')">
+        <button id="stock-consultar" class="icon-button primary">
           <span>🔍</span>
           Consultar
         </button>
 
-        <button class="icon-button primary" onclick="goToStock('crear')">
+        <button id="stock-crear" class="icon-button primary">
           <span>➕</span>
           Crear
         </button>
 
-        <button class="icon-button primary" onclick="goToStock('modificar')">
+        <button id="stock-modificar" class="icon-button primary">
           <span>✏️</span>
           Modificar
         </button>
 
-        <button class="icon-button danger" onclick="goToStock('borrar')">
+        <button id="stock-borrar" class="icon-button danger">
           <span>🗑️</span>
           Borrar
         </button>
       </div>
 
-      <button onclick="goTo('menu')">Volver</button>
+      <button id="btn-stock-back">Volver</button>
     </div>
   `;
+
+  document
+    .getElementById("stock-consultar")
+    .addEventListener("click", () => goToStock("consultar"));
+
+  document
+    .getElementById("stock-crear")
+    .addEventListener("click", () => goToStock("crear"));
+
+  document
+    .getElementById("stock-modificar")
+    .addEventListener("click", () => goToStock("modificar"));
+
+  document
+    .getElementById("stock-borrar")
+    .addEventListener("click", () => goToStock("borrar"));
+
+  document
+    .getElementById("btn-stock-back")
+    .addEventListener("click", () => goTo("menu"));
+}
+
+/* =====================
+   STOCK - CREAR
+===================== */
+export function renderStockCrear() {
+  app.innerHTML = `
+    <div class="card">
+      <h2>Crear producto</h2>
+
+      <input placeholder="Producto" />
+      <input placeholder="Marca" />
+      <input placeholder="Detalle" />
+      <input placeholder="Contenido / Peso" />
+
+      <button class="btn-primary">Aceptar</button>
+      <button id="btn-back-stock">Volver</button>
+    </div>
+  `;
+
+  document
+    .getElementById("btn-back-stock")
+    .addEventListener("click", () => goTo("stock"));
+}
+
+/* =====================
+   STOCK - MODIFICAR
+===================== */
+export function renderStockModificar() {
+  app.innerHTML = `
+    <div class="card">
+      <h2>Modificar producto</h2>
+
+      <select>
+        <option>Seleccionar producto</option>
+      </select>
+
+      <input placeholder="Producto" />
+      <input placeholder="Marca" />
+      <input placeholder="Detalle" />
+      <input placeholder="Contenido / Peso" />
+
+      <button class="btn-primary">Modificar</button>
+      <button id="btn-back-stock">Volver</button>
+    </div>
+  `;
+
+  document
+    .getElementById("btn-back-stock")
+    .addEventListener("click", () => goTo("stock"));
+}
+
+/* =====================
+   STOCK - BORRAR
+===================== */
+export function renderStockBorrar() {
+  app.innerHTML = `
+    <div class="card">
+      <h2>Borrar producto</h2>
+
+      <select>
+        <option>Seleccionar producto</option>
+      </select>
+
+      <button class="btn-danger">Borrar</button>
+      <button id="btn-back-stock">Volver</button>
+    </div>
+  `;
+
+  document
+    .getElementById("btn-back-stock")
+    .addEventListener("click", () => goTo("stock"));
+}
+
+/* =====================
+   STOCK - CONSULTAR
+===================== */
+export function renderStockConsultar() {
+  app.innerHTML = `
+    <div class="card">
+      <h2>Consultar stock</h2>
+
+      <button class="icon-button">
+        <span>📋</span>
+        Stock total
+      </button>
+
+      <button class="icon-button">
+        <span>📦</span>
+        Por producto
+      </button>
+
+      <button id="btn-back-stock">Volver</button>
+    </div>
+  `;
+
+  document
+    .getElementById("btn-back-stock")
+    .addEventListener("click", () => goTo("stock"));
 }
