@@ -150,13 +150,64 @@ async function submitCrearProducto() {
       producto,
       marca,
       detalle,
-      contenido_peso: contenido, // 🔑 coincide con la DB
+      contenido_peso: contenido,
     });
 
     alert("Producto creado correctamente");
     goToStockMenu();
   } catch (error) {
     alert("Error al crear el producto");
+    console.error(error);
+  }
+}
+
+/* ===== STOCK CONSULTAR ===== */
+async function renderStockConsultar() {
+  app.innerHTML = `
+    <div class="card menu">
+      <h2>Productos</h2>
+      <p class="muted">Cargando productos...</p>
+      <button onclick="goToStockMenu()">Volver</button>
+    </div>
+  `;
+
+  try {
+    const productos = await obtenerProductos();
+
+    let html = `
+      <div class="card menu">
+        <h2>Productos</h2>
+        <div class="list">
+    `;
+
+    if (productos.length === 0) {
+      html += `<p class="muted">No hay productos cargados</p>`;
+    } else {
+      productos.forEach((p) => {
+        html += `
+          <div class="item">
+            <strong>${p.producto}</strong><br />
+            <small>${p.marca} – ${p.contenido_peso}</small><br />
+            <small class="muted">${p.detalle || ""}</small>
+          </div>
+        `;
+      });
+    }
+
+    html += `
+        </div>
+        <button onclick="goToStockMenu()">Volver</button>
+      </div>
+    `;
+
+    app.innerHTML = html;
+  } catch (error) {
+    app.innerHTML = `
+      <div class="card center-screen">
+        <p>Error al cargar productos</p>
+        <button onclick="goToStockMenu()">Volver</button>
+      </div>
+    `;
     console.error(error);
   }
 }
