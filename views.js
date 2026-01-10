@@ -141,9 +141,29 @@ async function submitCrearProducto() {
   const contenido = document.getElementById("contenido").value.trim();
 
   if (!producto || !marca || !contenido) {
-    alert("Completá al menos Producto, Marca y Contenido");
+    Swal.fire({
+      icon: "warning",
+      title: "Datos incompletos",
+      text: "Completá al menos Producto, Marca y Contenido",
+    });
     return;
   }
+
+  const confirmacion = await Swal.fire({
+    title: "¿Crear producto?",
+    html: `
+      <strong>${producto}</strong><br>
+      ${marca} – ${contenido}
+    `,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Sí, crear",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "#c2a86e",
+    cancelButtonColor: "#666",
+  });
+
+  if (!confirmacion.isConfirmed) return;
 
   try {
     await crearProducto({
@@ -153,13 +173,25 @@ async function submitCrearProducto() {
       contenido_peso: contenido,
     });
 
-    alert("Producto creado correctamente");
+    await Swal.fire({
+      icon: "success",
+      title: "Producto creado",
+      text: "El producto se guardó correctamente",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+
     goToStockMenu();
   } catch (error) {
-    alert("Error al crear el producto");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "No se pudo crear el producto",
+    });
     console.error(error);
   }
 }
+
 
 /* ===== STOCK CONSULTAR ===== */
 async function renderStockConsultar() {
