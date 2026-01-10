@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://controldestock-6waj.onrender.com";
 
 /* ==============================
    PRODUCTOS (STOCK)
