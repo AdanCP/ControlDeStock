@@ -335,3 +335,117 @@ function confirmarBorradoSeleccionado() {
     }
   });
 }
+
+/* ===== STOCK MODIFICAR ===== */
+async function renderStockModificar() {
+  app.innerHTML = `
+    <div class="card center-screen">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos...</p>
+      <button onclick="goToStockMenu()">Cancelar</button>
+    </div>
+  `;
+
+  try {
+    const productos = await obtenerProductos();
+
+    let options = `<option value="">Seleccionar producto</option>`;
+    productos.forEach((p) => {
+      options += `
+        <option value="${p.id}">
+          ${p.producto} | ${p.marca} | ${p.contenido_peso}
+        </option>
+      `;
+    });
+
+    app.innerHTML = `
+      <div class="card center-screen">
+        <h2>Modificar producto</h2>
+
+        <select id="productoSelect" onchange="cargarProductoParaEditar()">
+          ${options}
+        </select>
+
+        <input id="producto" placeholder="Producto" disabled />
+        <input id="marca" placeholder="Marca" disabled />
+        <input id="detalle" placeholder="Detalle" disabled />
+        <input id="contenido" placeholder="Contenido / Peso" disabled />
+
+        <button class="btn-primary" onclick="confirmarModificacion()">
+          Aceptar
+        </button>
+
+        <button onclick="goToStockMenu()">Cancelar</button>
+      </div>
+    `;
+
+    window._productosCache = productos;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/* ===== CARGAR PRODUCTO EN FORM ===== */
+function cargarProductoParaEditar() {
+  const select = document.getElementById("productoSelect");
+  const id = select.value;
+
+  if (!id) return;
+
+  const producto = window._productosCache.find(
+    (p) => p.id === Number(id)
+  );
+
+  document.getElementById("producto").value = producto.producto;
+  document.getElementById("marca").value = producto.marca;
+  document.getElementById("detalle").value = producto.detalle || "";
+  document.getElementById("contenido").value = producto.contenido_peso;
+
+  document
+    .querySelectorAll("#producto, #marca, #detalle, #contenido")
+    .forEach((i) => (i.disabled = false));
+}
+
+/* ===== CONFIRMAR MODIFICACIÓN ===== */
+async function confirmarModificacion() {
+  const id = document.getElementById("productoSelect").value;
+
+  if (!id) {
+    Swal.fire("Atención", "Seleccioná un producto", "warning");
+    return;
+  }
+
+  const data = {
+    producto: document.getElementById("producto").value.trim(),
+    marca: document.getElementById("marca").value.trim(),
+    detalle: document.getElementById("detalle").value.trim(),
+    contenido_peso: document.getElementById("contenido").value.trim(),
+  };
+
+  const confirmacion = await Swal.fire({
+    title: "¿Guardar cambios?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Sí, guardar",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "#c2a86e",
+  });
+
+  if (!confirmacion.isConfirmed) return;
+
+  try {
+    await modificarProducto(id, data);
+
+    await Swal.fire({
+      icon: "success",
+      title: "Producto actualizado",
+      timer: 1200,
+      showConfirmButton: false,
+    });
+
+    goToStockMenu();
+  } catch (error) {
+    Swal.fire("Error", "No se pudo modificar el producto", "error");
+    console.error(error);
+  }
+}
