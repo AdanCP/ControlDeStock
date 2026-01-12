@@ -196,9 +196,9 @@ async function submitCrearProducto() {
 /* ===== STOCK CONSULTAR ===== */
 async function renderStockConsultar() {
   app.innerHTML = `
-    <div class="card menu">
-      <h2>Productos</h2>
-      <p class="muted">Cargando productos...</p>
+    <div class="card center-screen">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos...</p>
       <button onclick="goToStockMenu()">Volver</button>
     </div>
   `;
