@@ -243,3 +243,95 @@ async function renderStockConsultar() {
     console.error(error);
   }
 }
+
+/* ===== STOCK BORRAR ===== */
+async function renderStockBorrar() {
+  app.innerHTML = `
+    <div class="card center-screen">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos...</p>
+      <button onclick="goToStockMenu()">Volver</button>
+    </div>
+  `;
+
+  try {
+    const productos = await obtenerProductos();
+
+    let options = `<option value="">Seleccionar producto</option>`;
+
+   productos.forEach((p) => {
+  options += `
+    <option value="${p.id}">
+      ${p.producto} | ${p.marca} | ${p.contenido_peso}
+      ${p.detalle ? " - " + p.detalle : ""}
+    </option>
+  `;
+});
+
+  
+    app.innerHTML = `
+      <div class="card center-screen">
+        <h2>Borrar producto</h2>
+
+        <select id="productoSelect">
+          ${options}
+        </select>
+
+        <button class="btn-primary" onclick="confirmarBorradoSeleccionado()">
+          Eliminar
+        </button>
+
+        <button onclick="goToStockMenu()">Volver</button>
+      </div>
+    `;
+  } catch (error) {
+    app.innerHTML = `
+      <div class="card center-screen">
+        <p>Error al cargar productos</p>
+        <button onclick="goToStockMenu()">Volver</button>
+      </div>
+    `;
+    console.error(error);
+  }
+}
+
+/* ===== CONFIRMAR BORRADO DESDE SELECT ===== */
+function confirmarBorradoSeleccionado() {
+  const select = document.getElementById("productoSelect");
+  const id = select.value;
+  const texto = select.options[select.selectedIndex]?.text;
+
+  if (!id) {
+    Swal.fire("Atención", "Seleccioná un producto", "warning");
+    return;
+  }
+
+  Swal.fire({
+    title: "¿Eliminar producto?",
+    text: texto,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#c2a86e",
+    cancelButtonColor: "#555",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await borrarProducto(id);
+
+        Swal.fire({
+          icon: "success",
+          title: "Producto eliminado",
+          timer: 1200,
+          showConfirmButton: false,
+        });
+
+        goToStockMenu();
+      } catch (error) {
+        Swal.fire("Error", "No se pudo eliminar el producto", "error");
+        console.error(error);
+      }
+    }
+  });
+}

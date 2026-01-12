@@ -33,3 +33,16 @@ async function obtenerProductos() {
 
   return await response.json();
 }
+
+/*BORRAR PRODUCTOS */
+async function borrarProducto(id) {
+  const response = await fetch(`${API_URL}/products/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al borrar producto");
+  }
+
+  return response.json();
+}
