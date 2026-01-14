@@ -1,22 +1,38 @@
-import sqlite3 from "sqlite3";
+import pkg from "pg";
+const { Pool } = pkg;
 
-const db = new sqlite3.Database("./database.sqlite", (err) => {
-  if (err) {
-    console.error("❌ Error al abrir la base de datos", err);
-  } else {
-    console.log("✅ Base de datos SQLite conectada");
-  }
+// ==============================
+// CONEXIÓN A POSTGRES (RENDER)
+// ==============================
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // obligatorio en Render
+  },
 });
 
-db.run(`
-  CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    producto TEXT NOT NULL,
-    marca TEXT NOT NULL,
-    detalle TEXT,
-    contenido_peso TEXT NOT NULL,
-    createdAt TEXT DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+// ==============================
+// TEST DE CONEXIÓN + INIT DB
+// ==============================
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        producto TEXT NOT NULL,
+        marca TEXT NOT NULL,
+        detalle TEXT,
+        contenido_peso TEXT NOT NULL
+      );
+    `);
 
-export default db;
+    console.log("✅ Base de datos conectada y tabla products lista");
+  } catch (error) {
+    console.error("❌ Error inicializando la base de datos", error);
+  }
+}
+
+// Ejecutar al iniciar el backend
+initDB();
+
+export default pool;
