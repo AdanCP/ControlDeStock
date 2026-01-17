@@ -67,7 +67,7 @@ function renderMainMenu() {
           Ventas
         </button>
 
-        <button class="icon-button">
+        <button class="icon-button" onclick="goTo('pedidos')">
           <span>🚚</span>
           Pedidos
         </button>
@@ -448,4 +448,94 @@ async function confirmarModificacion() {
     Swal.fire("Error", "No se pudo modificar el producto", "error");
     console.error(error);
   }
+}
+
+/* ===== PEDIDOS - LISTADO PENDIENTES ===== */
+function renderPedidos() {
+  app.innerHTML = `
+    <div class="card menu">
+      <h2>Pedidos pendientes</h2>
+
+      <div class="list">
+        <p class="muted">No hay pedidos pendientes</p>
+      </div>
+
+      <button class="btn-primary" onclick="renderNuevoPedido()">
+        ➕ Nuevo pedido
+      </button>
+
+      <button onclick="goTo('menu')">Volver</button>
+    </div>
+  `;
+}
+
+/* ===== PEDIDOS - NUEVO ===== */
+function renderNuevoPedido() {
+  app.innerHTML = `
+    <div class="card center-screen">
+      <h2>Nuevo pedido</h2>
+
+      <select id="pedidoProducto">
+        <option value="">Seleccionar producto</option>
+      </select>
+
+      <input type="number" id="pedidoCantidad" placeholder="Cantidad de unidades" />
+      <input type="number" id="pedidoPrecio" placeholder="Precio unitario" />
+      <input type="date" id="pedidoFecha" />
+
+      <div style="text-align:left; margin: 10px 0">
+        <label>
+          <input type="checkbox" id="pedidoPendiente" checked />
+          Pendiente
+        </label><br />
+
+        <label>
+          <input type="checkbox" id="pedidoLlegado" />
+          Llegado
+        </label>
+      </div>
+
+      <button class="btn-primary" onclick="confirmarPedido()">
+        Aceptar
+      </button>
+
+      <button onclick="cancelarPedido()">Cancelar</button>
+    </div>
+  `;
+}
+
+function confirmarPedido() {
+  Swal.fire({
+    title: "Confirmar pedido",
+    text: "¿Deseás guardar este pedido?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Sí, guardar",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "#c2a86e",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        "Guardado",
+        "Pedido registrado (simulado)",
+        "success"
+      );
+      renderPedidos();
+    }
+  });
+}
+
+function cancelarPedido() {
+  Swal.fire({
+    title: "¿Cancelar pedido?",
+    text: "Los datos no guardados se perderán",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, volver",
+    cancelButtonText: "Seguir editando",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      renderPedidos();
+    }
+  });
 }

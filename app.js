@@ -44,24 +44,32 @@ function render() {
 
   if (state.view === "home") {
     renderHome();
+
   } else if (state.view === "login") {
     renderLogin();
+
   } else if (state.view === "register") {
     renderRegister();
+
   } else if (state.view === "menu") {
     renderMainMenu();
+
   } else if (state.view === "stock") {
     if (!state.stockView) renderStockMenu();
     else if (state.stockView === "crear") renderStockCrear();
     else if (state.stockView === "modificar") renderStockModificar?.();
     else if (state.stockView === "borrar") renderStockBorrar?.();
     else if (state.stockView === "consultar") renderStockConsultar?.();
+
+  } else if (state.view === "pedidos") {
+    renderPedidos();
+
   } else {
     app.innerHTML = "<p>Pantalla no encontrada</p>";
   }
 }
 
 /* ===============================
-   INICIO DE LA APP (CLAVE)
+   INICIO DE LA APP
 =============================== */
 render();
