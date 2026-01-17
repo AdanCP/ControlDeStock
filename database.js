@@ -12,10 +12,13 @@ const pool = new Pool({
 });
 
 // ==============================
-// TEST DE CONEXIÓN + INIT DB
+// INIT DB - CREAR TABLAS BASE
 // ==============================
 async function initDB() {
   try {
+    /* ==============================
+       TABLA PRODUCTS
+    ============================== */
     await pool.query(`
       CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
@@ -26,7 +29,28 @@ async function initDB() {
       );
     `);
 
-    console.log("✅ Base de datos conectada y tabla products lista");
+    /* ==============================
+       TABLA ORDERS (PEDIDOS)
+    ============================== */
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        product_id INTEGER NOT NULL,
+        cantidad INTEGER NOT NULL,
+        precio NUMERIC(10,2) NOT NULL,
+        fecha DATE NOT NULL,
+        estado TEXT NOT NULL CHECK (estado IN ('pendiente', 'llegado')),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        CONSTRAINT fk_product
+          FOREIGN KEY (product_id)
+          REFERENCES products(id)
+          ON DELETE CASCADE
+      );
+    `);
+
+    console.log("✅ Base de datos conectada");
+    console.log("✅ Tablas products y orders listas");
   } catch (error) {
     console.error("❌ Error inicializando la base de datos", error);
   }
