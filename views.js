@@ -116,341 +116,7 @@ function renderStockMenu() {
   `;
 }
 
-/* ===== STOCK CREAR ===== */
-function renderStockCrear() {
-  app.innerHTML = `
-    <div class="card center-screen">
-      <h2>Crear producto</h2>
-
-      <input id="producto" placeholder="Producto" />
-      <input id="marca" placeholder="Marca" />
-      <input id="detalle" placeholder="Detalle" />
-      <input id="contenido" placeholder="Contenido / Peso" />
-
-      <button class="btn-primary" onclick="submitCrearProducto()">Aceptar</button>
-      <button onclick="goToStockMenu()">Volver</button>
-    </div>
-  `;
-}
-
-/* ===== LOGICA CREAR PRODUCTO ===== */
-async function submitCrearProducto() {
-  const producto = document.getElementById("producto").value.trim();
-  const marca = document.getElementById("marca").value.trim();
-  const detalle = document.getElementById("detalle").value.trim();
-  const contenido = document.getElementById("contenido").value.trim();
-
-  if (!producto || !marca || !contenido) {
-    Swal.fire({
-      icon: "warning",
-      title: "Datos incompletos",
-      text: "Completá al menos Producto, Marca y Contenido",
-    });
-    return;
-  }
-
-  const confirmacion = await Swal.fire({
-    title: "¿Crear producto?",
-    html: `
-      <strong>${producto}</strong><br>
-      ${marca} – ${contenido}
-    `,
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Sí, crear",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "#c2a86e",
-    cancelButtonColor: "#666",
-  });
-
-  if (!confirmacion.isConfirmed) return;
-
-  try {
-    await crearProducto({
-      producto,
-      marca,
-      detalle,
-      contenido_peso: contenido,
-    });
-
-    await Swal.fire({
-      icon: "success",
-      title: "Producto creado",
-      text: "El producto se guardó correctamente",
-      timer: 1500,
-      showConfirmButton: false,
-    });
-
-    goToStockMenu();
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "No se pudo crear el producto",
-    });
-    console.error(error);
-  }
-}
-
-
-/* ===== STOCK CONSULTAR ===== */
-async function renderStockConsultar() {
-  app.innerHTML = `
-    <div class="card center-screen">
-      <div class="loader"></div>
-      <p class="loader-text">Cargando productos...</p>
-      <button onclick="goToStockMenu()">Volver</button>
-    </div>
-  `;
-
-  try {
-    const productos = await obtenerProductos();
-
-    let html = `
-      <div class="card menu">
-        <h2>Productos</h2>
-        <div class="list">
-    `;
-
-    if (productos.length === 0) {
-      html += `<p class="muted">No hay productos cargados</p>`;
-    } else {
-      productos.forEach((p) => {
-        html += `
-          <div class="item">
-            <strong>${p.producto}</strong><br />
-            <small>${p.marca} – ${p.contenido_peso}</small><br />
-            <small class="muted">${p.detalle || ""}</small>
-          </div>
-        `;
-      });
-    }
-
-    html += `
-        </div>
-        <button onclick="goToStockMenu()">Volver</button>
-      </div>
-    `;
-
-    app.innerHTML = html;
-  } catch (error) {
-    app.innerHTML = `
-      <div class="card center-screen">
-        <p>Error al cargar productos</p>
-        <button onclick="goToStockMenu()">Volver</button>
-      </div>
-    `;
-    console.error(error);
-  }
-}
-
-/* ===== STOCK BORRAR ===== */
-async function renderStockBorrar() {
-  app.innerHTML = `
-    <div class="card center-screen">
-      <div class="loader"></div>
-      <p class="loader-text">Cargando productos...</p>
-      <button onclick="goToStockMenu()">Volver</button>
-    </div>
-  `;
-
-  try {
-    const productos = await obtenerProductos();
-
-    let options = `<option value="">Seleccionar producto</option>`;
-
-   productos.forEach((p) => {
-  options += `
-    <option value="${p.id}">
-      ${p.producto} | ${p.marca} | ${p.contenido_peso}
-      ${p.detalle ? " - " + p.detalle : ""}
-    </option>
-  `;
-});
-
-  
-    app.innerHTML = `
-      <div class="card center-screen">
-        <h2>Borrar producto</h2>
-
-        <select id="productoSelect">
-          ${options}
-        </select>
-
-        <button class="btn-primary" onclick="confirmarBorradoSeleccionado()">
-          Eliminar
-        </button>
-
-        <button onclick="goToStockMenu()">Volver</button>
-      </div>
-    `;
-  } catch (error) {
-    app.innerHTML = `
-      <div class="card center-screen">
-        <p>Error al cargar productos</p>
-        <button onclick="goToStockMenu()">Volver</button>
-      </div>
-    `;
-    console.error(error);
-  }
-}
-
-/* ===== CONFIRMAR BORRADO DESDE SELECT ===== */
-function confirmarBorradoSeleccionado() {
-  const select = document.getElementById("productoSelect");
-  const id = select.value;
-  const texto = select.options[select.selectedIndex]?.text;
-
-  if (!id) {
-    Swal.fire("Atención", "Seleccioná un producto", "warning");
-    return;
-  }
-
-  Swal.fire({
-    title: "¿Eliminar producto?",
-    text: texto,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#c2a86e",
-    cancelButtonColor: "#555",
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        await borrarProducto(id);
-
-        Swal.fire({
-          icon: "success",
-          title: "Producto eliminado",
-          timer: 1200,
-          showConfirmButton: false,
-        });
-
-        goToStockMenu();
-      } catch (error) {
-        Swal.fire("Error", "No se pudo eliminar el producto", "error");
-        console.error(error);
-      }
-    }
-  });
-}
-
-/* ===== STOCK MODIFICAR ===== */
-async function renderStockModificar() {
-  app.innerHTML = `
-    <div class="card center-screen">
-      <div class="loader"></div>
-      <p class="loader-text">Cargando productos...</p>
-      <button onclick="goToStockMenu()">Cancelar</button>
-    </div>
-  `;
-
-  try {
-    const productos = await obtenerProductos();
-
-    let options = `<option value="">Seleccionar producto</option>`;
-    productos.forEach((p) => {
-      options += `
-        <option value="${p.id}">
-          ${p.producto} | ${p.marca} | ${p.contenido_peso}
-        </option>
-      `;
-    });
-
-    app.innerHTML = `
-      <div class="card center-screen">
-        <h2>Modificar producto</h2>
-
-        <select id="productoSelect" onchange="cargarProductoParaEditar()">
-          ${options}
-        </select>
-
-        <input id="producto" placeholder="Producto" disabled />
-        <input id="marca" placeholder="Marca" disabled />
-        <input id="detalle" placeholder="Detalle" disabled />
-        <input id="contenido" placeholder="Contenido / Peso" disabled />
-
-        <button class="btn-primary" onclick="confirmarModificacion()">
-          Aceptar
-        </button>
-
-        <button onclick="goToStockMenu()">Cancelar</button>
-      </div>
-    `;
-
-    window._productosCache = productos;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-/* ===== CARGAR PRODUCTO EN FORM ===== */
-function cargarProductoParaEditar() {
-  const select = document.getElementById("productoSelect");
-  const id = select.value;
-
-  if (!id) return;
-
-  const producto = window._productosCache.find(
-    (p) => p.id === Number(id)
-  );
-
-  document.getElementById("producto").value = producto.producto;
-  document.getElementById("marca").value = producto.marca;
-  document.getElementById("detalle").value = producto.detalle || "";
-  document.getElementById("contenido").value = producto.contenido_peso;
-
-  document
-    .querySelectorAll("#producto, #marca, #detalle, #contenido")
-    .forEach((i) => (i.disabled = false));
-}
-
-/* ===== CONFIRMAR MODIFICACIÓN ===== */
-async function confirmarModificacion() {
-  const id = document.getElementById("productoSelect").value;
-
-  if (!id) {
-    Swal.fire("Atención", "Seleccioná un producto", "warning");
-    return;
-  }
-
-  const data = {
-    producto: document.getElementById("producto").value.trim(),
-    marca: document.getElementById("marca").value.trim(),
-    detalle: document.getElementById("detalle").value.trim(),
-    contenido_peso: document.getElementById("contenido").value.trim(),
-  };
-
-  const confirmacion = await Swal.fire({
-    title: "¿Guardar cambios?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Sí, guardar",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "#c2a86e",
-  });
-
-  if (!confirmacion.isConfirmed) return;
-
-  try {
-    await modificarProducto(id, data);
-
-    await Swal.fire({
-      icon: "success",
-      title: "Producto actualizado",
-      timer: 1200,
-      showConfirmButton: false,
-    });
-
-    goToStockMenu();
-  } catch (error) {
-    Swal.fire("Error", "No se pudo modificar el producto", "error");
-    console.error(error);
-  }
-}
-
-/* ===== PEDIDOS - LISTADO PENDIENTES ===== */
+/* ===== PEDIDOS - LISTADO ===== */
 function renderPedidos() {
   app.innerHTML = `
     <div class="card menu">
@@ -469,14 +135,34 @@ function renderPedidos() {
   `;
 }
 
-/* ===== PEDIDOS - NUEVO ===== */
-function renderNuevoPedido() {
+/* ===== PEDIDOS - NUEVO (FIX REAL) ===== */
+async function renderNuevoPedido() {
+  app.innerHTML = `
+    <div class="card center-screen">
+      <div class="loader"></div>
+      <p class="loader-text">Cargando productos...</p>
+      <button onclick="renderPedidos()">Volver</button>
+    </div>
+  `;
+
+  const productos = await obtenerProductos();
+
+  let options = `<option value="">Seleccionar producto</option>`;
+  productos.forEach((p) => {
+    options += `
+      <option value="${p.id}">
+        ${p.producto} | ${p.marca} | ${p.contenido_peso}
+        ${p.detalle ? " - " + p.detalle : ""}
+      </option>
+    `;
+  });
+
   app.innerHTML = `
     <div class="card center-screen">
       <h2>Nuevo pedido</h2>
 
       <select id="pedidoProducto">
-        <option value="">Seleccionar producto</option>
+        ${options}
       </select>
 
       <input type="number" id="pedidoCantidad" placeholder="Cantidad de unidades" />
@@ -485,57 +171,27 @@ function renderNuevoPedido() {
 
       <div style="text-align:left; margin: 10px 0">
         <label>
-          <input type="checkbox" id="pedidoPendiente" checked />
+          <input type="checkbox" id="pedidoPendiente" checked onclick="toggleEstadoPedido('pendiente')" />
           Pendiente
         </label><br />
 
         <label>
-          <input type="checkbox" id="pedidoLlegado" />
+          <input type="checkbox" id="pedidoLlegado" onclick="toggleEstadoPedido('llegado')" />
           Llegado
         </label>
       </div>
 
-      <button class="btn-primary" onclick="confirmarPedido()">
-        Aceptar
-      </button>
-
+      <button class="btn-primary" onclick="confirmarPedido()">Aceptar</button>
       <button onclick="cancelarPedido()">Cancelar</button>
     </div>
   `;
 }
 
-function confirmarPedido() {
-  Swal.fire({
-    title: "Confirmar pedido",
-    text: "¿Deseás guardar este pedido?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Sí, guardar",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "#c2a86e",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire(
-        "Guardado",
-        "Pedido registrado (simulado)",
-        "success"
-      );
-      renderPedidos();
-    }
-  });
-}
+/* ===== VALIDACIONES PEDIDO ===== */
+function toggleEstadoPedido(estado) {
+  const pendiente = document.getElementById("pedidoPendiente");
+  const llegado = document.getElementById("pedidoLlegado");
 
-function cancelarPedido() {
-  Swal.fire({
-    title: "¿Cancelar pedido?",
-    text: "Los datos no guardados se perderán",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, volver",
-    cancelButtonText: "Seguir editando",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      renderPedidos();
-    }
-  });
+  if (estado === "pendiente") llegado.checked = false;
+  if (estado === "llegado") pendiente.checked = false;
 }
